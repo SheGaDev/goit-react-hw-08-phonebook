@@ -6,7 +6,7 @@ const Loader = () => {
       <Grid
         height='160'
         width='160'
-        color='yellow'
+        color='purple'
         radius='8'
         wrapperStyle={{
           position: 'absolute',

@@ -1,43 +1,53 @@
-import { useSelector } from 'react-redux';
-import { selectFilteredItems } from '../../redux/selectors';
-import { deleteContact, fetchContacts, useAppDispatch } from '../../redux/contactsThunk';
-import { useEffect } from 'react';
-import Loader from '../loader/Loader';
+import { useState } from 'react';
+import ButtonDelete from 'components/buttons/ButtonDelete';
+import ButtonEdit from 'components/buttons/ButtonEdit';
+import ContactEdit from 'components/forms/ContactEdit';
+import { useContacts } from 'redux/selectors';
+import { IContact } from 'types/contacts-types';
 
 const ContactList = () => {
-  const dispatch = useAppDispatch();
-  const { isLoading, items: contacts } = useSelector(selectFilteredItems);
+  const [openForm, setOpenForm] = useState<{ isOpen: boolean; contact: IContact }>({
+    isOpen: false,
+    contact: { name: '', number: '', id: '' },
+  });
+  const contacts = useContacts();
+  // const filterContacts = useFilterItems();
 
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
+  const editContact = (contact: IContact) => {
+    setOpenForm((prev) => ({ isOpen: !prev.isOpen, contact }));
+  };
+
+  const closeFormEdit = () => {
+    setOpenForm((prev) => ({ isOpen: !prev.isOpen, contact: { name: '', number: '', id: '' } }));
+  };
 
   return (
-    <>
-      {isLoading && <Loader />}
-      <ul>
-        {contacts.length ? (
-          contacts.map(({ id, name, number }) => {
-            return (
-              <li key={id} className='flex content-center gap-3'>
-                <button
-                  className='m-1 bg-[#696969] px-1 text-white hover:bg-black'
-                  type='button'
-                  onClick={() => dispatch(deleteContact(id))}
-                >
-                  Delete
-                </button>
-                <span className='pb-3'>
-                  {name}: {number}
-                </span>
-              </li>
-            );
-          })
-        ) : (
-          <span>Not found</span>
-        )}
-      </ul>
-    </>
+    <div className='flex w-[100%] flex-col items-center justify-center rounded border-[1px] border-black p-4'>
+      {openForm.isOpen && <ContactEdit contact={openForm.contact} onClose={closeFormEdit} />}
+      {contacts?.items?.length !== 0 ? (
+        <ul className='flex w-[90%] flex-col gap-3'>
+          {contacts.items.map((contact) => (
+            <li
+              key={contact.id}
+              className='group/item flex w-[100%] animate-translate-down justify-between rounded p-2 shadow hover:bg-slate-100'
+            >
+              <div className='flex flex-col'>
+                <span>Name: {contact.name}</span>
+                <span>Number: {contact.number}</span>
+              </div>
+              <div className='group/edit invisible flex animate-[translate-down] items-center gap-3 group-hover/item:visible'>
+                <ButtonEdit editContact={editContact} contact={contact} />
+                <ButtonDelete id={contact.id} />
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <span>
+          <b>Empty!</b>
+        </span>
+      )}
+    </div>
   );
 };
 

@@ -1,15 +1,15 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
-import { nanoid } from '@reduxjs/toolkit';
-import type { Form } from '@types';
-import { useSelector } from 'react-redux';
-import { selectContacts } from '../../redux/selectors';
-import { addContact, useAppDispatch } from '../../redux/contactsThunk';
+import { useState, ChangeEvent, FormEvent } from 'react';
+import Button, { ButtonType } from 'components/buttons/Button';
+import { IContactForm } from 'types/contacts-types';
+import { useAppDispatch } from 'redux/store';
+import { useContacts } from 'redux/selectors';
+import { addContactThunk } from 'redux/thunk/contacts-thunk';
 
 const ContactForm = () => {
-  const [form, setForm] = useState<Form>({ name: '', number: '' });
+  const [form, setForm] = useState<IContactForm>({ name: '', number: '' });
   const dispatch = useAppDispatch();
 
-  const contacts = useSelector(selectContacts);
+  const { items: contacts } = useContacts();
 
   const handleInput = (e: ChangeEvent) => {
     const { name, value }: { name: string; value: string } = e.target as HTMLInputElement;
@@ -21,47 +21,43 @@ const ContactForm = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setForm({ name: '', number: '' });
-    if (contacts.items.some((cont) => cont.name.toLowerCase() === form.name.toLowerCase())) {
+    if (contacts.some((cont) => cont.name.toLowerCase() === form.name.toLowerCase())) {
       alert(`${form.name} is arleady in contacts.`);
       return;
     }
-    const data = {
-      id: nanoid(),
-      name: form.name,
-      number: form.number,
-    };
-    dispatch(addContact(data));
+    dispatch(addContactThunk({ ...form }));
   };
 
   return (
-    <form onSubmit={handleSubmit} className='flex w-[100%] flex-col items-center gap-3'>
-      <label className='my-auto flex flex-col items-center'>
+    <form
+      onSubmit={handleSubmit}
+      className='flex w-[100%] flex-col items-center justify-center gap-3 rounded border-[1px] border-black p-5'
+    >
+      <label className='flex w-[50%] flex-col gap-1'>
         Name:
         <input
-          className='w-[400px]'
+          onChange={handleInput}
           type='text'
           name='name'
-          onChange={handleInput}
           pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
           value={form.name}
         />
       </label>
-      <label className='my-auto flex flex-col items-center'>
+      <label className='flex w-[50%] flex-col gap-1'>
         Number:
         <input
-          className='w-[400px]'
+          onChange={handleInput}
           type='tel'
           name='number'
-          onChange={handleInput}
           pattern='\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}'
           title='Phone number must be digits and can contain spaces, dashes, parentheses and can start with +'
           required
           value={form.number}
         />
       </label>
-      <button className='bg-[#696969] px-4 py-2 text-white hover:bg-black'>Add contact</button>
+      <Button type={ButtonType.Submit} title='Add contact' />
     </form>
   );
 };
