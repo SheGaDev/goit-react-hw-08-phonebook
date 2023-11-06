@@ -2,16 +2,17 @@ import { useState } from 'react';
 import ButtonDelete from 'components/buttons/ButtonDelete';
 import ButtonEdit from 'components/buttons/ButtonEdit';
 import ContactEdit from 'components/forms/ContactEdit';
-import { useContacts } from 'redux/selectors';
+import { useFilterItems } from 'redux/selectors';
 import { IContact } from 'types/contacts-types';
 import Loader from 'components/loader/Loader';
 
 const ContactList = () => {
+  const contacts = useFilterItems();
+  // const contacts = useContacts();
   const [openForm, setOpenForm] = useState<{ isOpen: boolean; contact: IContact }>({
     isOpen: false,
     contact: { name: '', number: '', id: '' },
   });
-  const contacts = useContacts();
 
   const editContact = (contact: IContact) => {
     setOpenForm((prev) => ({ isOpen: !prev.isOpen, contact }));
