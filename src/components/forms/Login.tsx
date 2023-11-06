@@ -1,10 +1,13 @@
 import Button, { ButtonType } from 'components/buttons/Button';
+import Loader from 'components/loader/Loader';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { useAuth } from 'redux/selectors';
 import { useAppDispatch } from 'redux/store';
 import { authLoginThunk } from 'redux/thunk/auth-thunk';
 import { ILoginForm } from 'types/auth-types';
 
 const LoginForm = () => {
+  const auth = useAuth();
   const [form, setForm] = useState<ILoginForm>({ email: '', password: '' });
   const dispatch = useAppDispatch();
 
@@ -22,24 +25,27 @@ const LoginForm = () => {
   };
 
   return (
-    <form className='flex flex-col gap-2' onSubmit={onSubmit}>
-      <label className='flex flex-col'>
-        Email:
-        <input onChange={handleInput} name='email' type='email' value={form.email} />
-      </label>
-      <label className='flex flex-col'>
-        Password:
-        <input
-          onChange={handleInput}
-          name='password'
-          type='password'
-          minLength={7}
-          maxLength={32}
-          value={form.password}
-        />
-      </label>
-      <Button type={ButtonType.Submit} title='Login' />;
-    </form>
+    <>
+      {auth.isLoading && <Loader />}
+      <form className='flex flex-col gap-2' onSubmit={onSubmit}>
+        <label className='flex flex-col'>
+          Email:
+          <input onChange={handleInput} name='email' type='email' value={form.email} />
+        </label>
+        <label className='flex flex-col'>
+          Password:
+          <input
+            onChange={handleInput}
+            name='password'
+            type='password'
+            minLength={7}
+            maxLength={32}
+            value={form.password}
+          />
+        </label>
+        <Button type={ButtonType.Submit} title='Login' />;
+      </form>
+    </>
   );
 };
 
