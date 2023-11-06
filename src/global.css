@@ -7,7 +7,7 @@
   --font-color: #000;
 }
 * {
-  font-size: 24px;
+  font-size: 20px;
 }
 body {
   background-color: var(--bg-color);
