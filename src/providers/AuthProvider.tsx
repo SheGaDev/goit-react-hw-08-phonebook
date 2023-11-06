@@ -9,6 +9,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    console.log('AUTH-PROVIDER');
     dispatch(authorization());
     if (auth.isAuth) {
       dispatch(authUserThunk());

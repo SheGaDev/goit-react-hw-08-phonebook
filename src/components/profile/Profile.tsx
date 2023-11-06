@@ -1,7 +1,15 @@
+import { useEffect } from 'react';
 import { useUser } from 'redux/selectors';
+import { useAppDispatch } from 'redux/store';
+import { authUserThunk } from 'redux/thunk/auth-thunk';
 
 const Profile = () => {
   const user = useUser();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(authUserThunk());
+  }, []);
 
   return (
     <>
