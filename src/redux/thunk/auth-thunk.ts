@@ -24,7 +24,8 @@ export const authLoginThunk = createAsyncThunk<ILoginResponse, ILoginForm, Thunk
       const contacts: IContact[] = await fetchContacts();
       api.dispatch(
         setUser({
-          user: data.user,
+          name: data.user.name,
+          email: data.user.email,
           contacts: contacts.length,
         })
       );
