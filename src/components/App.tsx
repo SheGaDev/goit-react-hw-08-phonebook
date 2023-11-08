@@ -19,8 +19,8 @@ const App = () => {
         <Route path={'contacts'} element={<PrivateRoute children={<Contacts />} />} />
       </Route>
       <Route path={'/'} element={<AuthLayout />}>
-        <Route path={'/login'} element={<PublicRoute children={<Login />} />} />
-        <Route path={'/register'} element={<PublicRoute children={<Register />} />} />
+        <Route path={'login'} element={<PublicRoute children={<Login />} />} />
+        <Route path={'register'} element={<PublicRoute children={<Register />} />} />
       </Route>
     </Routes>
   );
