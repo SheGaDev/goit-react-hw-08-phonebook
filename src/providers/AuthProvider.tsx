@@ -13,7 +13,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (auth.isAuth) {
       dispatch(authUserThunk());
     }
-  }, [dispatch]);
+  }, []);
 
   return <>{children}</>;
 };
