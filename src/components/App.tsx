@@ -1,5 +1,7 @@
 import { lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import PrivateRoute from 'routes/private-route';
+import PublicRoute from 'routes/public-route';
 
 import Layout from './layout/Layout';
 import { useAuth } from 'redux/selectors';
@@ -17,13 +19,13 @@ const App = () => {
       <Route path={'/'} element={<Layout />}>
         {isAuth ? (
           <>
-            <Route index element={<Home />} />
-            <Route path={'contacts'} element={<Contacts />} />
+            <Route index element={<PrivateRoute children={<Home />} />} />
+            <Route path={'contacts'} element={<PrivateRoute children={<Contacts />} />} />
           </>
         ) : (
           <>
-            <Route path={'login'} element={<Login />} />
-            <Route path={'register'} element={<Register />} />
+            <Route path={'login'} element={<PublicRoute children={<Login />} />} />
+            <Route path={'register'} element={<PublicRoute children={<Register />} />} />
           </>
         )}
       </Route>
