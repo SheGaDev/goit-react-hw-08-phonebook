@@ -8,7 +8,6 @@ import Loader from 'components/loader/Loader';
 
 const ContactList = () => {
   const contacts = useFilterItems();
-  // const contacts = useContacts();
   const [openForm, setOpenForm] = useState<{ isOpen: boolean; contact: IContact }>({
     isOpen: false,
     contact: { name: '', number: '', id: '' },
