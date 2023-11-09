@@ -27,7 +27,6 @@ export const deleteContactThunk = createAsyncThunk<IContact, string, ThunkConfig
   async (state, api) => {
     try {
       const data = await deleteContact(state);
-      api.dispatch(updateUser(UpdateType.Decrement));
       return data;
     } catch (err) {
       if (isAxiosError(err)) api.rejectWithValue(err.message);

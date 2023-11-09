@@ -4,6 +4,7 @@ import { IContactForm } from 'types/contacts-types';
 import { useAppDispatch } from 'redux/store';
 import { useContacts } from 'redux/selectors';
 import { addContactThunk } from 'redux/thunk/contacts-thunk';
+import { UpdateType, updateUser } from 'redux/slice/user-slice';
 
 const ContactForm = () => {
   const [form, setForm] = useState<IContactForm>({ name: '', number: '' });
@@ -26,6 +27,7 @@ const ContactForm = () => {
       return;
     }
     dispatch(addContactThunk({ ...form }));
+    dispatch(updateUser(UpdateType.Increment));
   };
 
   return (

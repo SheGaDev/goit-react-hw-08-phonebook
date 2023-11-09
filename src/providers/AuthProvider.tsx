@@ -1,17 +1,22 @@
 import { ReactNode, useEffect } from 'react';
 import { useAuth } from 'redux/selectors';
-import { authorization } from 'redux/slice/auth-slice';
+import { updateContacts } from 'redux/slice/contacts-slice';
+import { setUser } from 'redux/slice/user-slice';
 import { useAppDispatch } from 'redux/store';
-import { authUserThunk } from 'redux/thunk/auth-thunk';
+import { fetchProfile } from 'services/auth-api';
+import { authorizationAxios } from 'services/instance';
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const auth = useAuth();
   const dispatch = useAppDispatch();
+  const { isAuth, token } = useAuth();
 
   useEffect(() => {
-    dispatch(authorization());
-    if (auth.isAuth) {
-      dispatch(authUserThunk());
+    authorizationAxios(token);
+    if (isAuth) {
+      fetchProfile().then(({ name, email, contacts }) => {
+        dispatch(setUser({ name, email, contacts: contacts.length }));
+        dispatch(updateContacts(contacts));
+      });
     }
   }, []);
 

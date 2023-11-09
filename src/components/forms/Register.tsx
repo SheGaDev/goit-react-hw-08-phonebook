@@ -2,6 +2,7 @@ import Button, { ButtonType } from 'components/buttons/Button';
 import Loader from 'components/loader/Loader';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useAuth } from 'redux/selectors';
+import { setUser } from 'redux/slice/user-slice';
 import { useAppDispatch } from 'redux/store';
 import { authRegisterThunk } from 'redux/thunk/auth-thunk';
 import { IRegisterForm } from 'types/auth-types';
@@ -21,6 +22,7 @@ const RegisterForm = () => {
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     dispatch(authRegisterThunk(form));
+    dispatch(setUser({ name: form.name, email: form.email, contacts: 0 }));
     setForm({ name: '', email: '', password: '' });
   };
 

@@ -1,13 +1,17 @@
 import { useUser } from 'redux/selectors';
 import { logout } from 'redux/slice/auth-slice';
+import { resetUser } from 'redux/slice/user-slice';
 import { useAppDispatch } from 'redux/store';
+import { authLogoutThunk } from 'redux/thunk/auth-thunk';
 
 const Menu = () => {
   const user = useUser();
   const dispatch = useAppDispatch();
 
   const onClick = () => {
+    dispatch(authLogoutThunk());
     dispatch(logout());
+    dispatch(resetUser());
   };
   const maxLengthEmail = (text: string) =>
     text.length > 15 ? text.substring(0, 15) + '...' : text;

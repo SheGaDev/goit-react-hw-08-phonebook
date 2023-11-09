@@ -2,8 +2,11 @@ import Button, { ButtonType } from 'components/buttons/Button';
 import Loader from 'components/loader/Loader';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useAuth } from 'redux/selectors';
+import { updateContacts } from 'redux/slice/contacts-slice';
+import { setUser } from 'redux/slice/user-slice';
 import { useAppDispatch } from 'redux/store';
 import { authLoginThunk } from 'redux/thunk/auth-thunk';
+import { fetchProfile } from 'services/auth-api';
 import { ILoginForm } from 'types/auth-types';
 
 const LoginForm = () => {
@@ -20,7 +23,12 @@ const LoginForm = () => {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(authLoginThunk(form));
+    dispatch(authLoginThunk(form)).then(() => {
+      fetchProfile().then(({ name, email, contacts }) => {
+        dispatch(setUser({ name, email, contacts: contacts.length }));
+        dispatch(updateContacts(contacts));
+      });
+    });
     setForm({ email: '', password: '' });
   };
 
