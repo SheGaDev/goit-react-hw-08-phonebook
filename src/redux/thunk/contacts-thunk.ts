@@ -1,6 +1,5 @@
 import { createAsyncThunk, nanoid } from '@reduxjs/toolkit';
 import { isAxiosError } from 'axios';
-import { UpdateType, updateUser } from 'redux/slice/user-slice';
 import { addContact, deleteContact, editContact, fetchContacts } from 'services/contacts-api';
 import { IContact, IContactForm } from 'types/contacts-types';
 import { ThunkConfig } from 'types/thunk-types';
