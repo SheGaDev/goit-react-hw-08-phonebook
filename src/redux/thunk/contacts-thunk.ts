@@ -14,7 +14,6 @@ export const addContactThunk = createAsyncThunk<IContact, IContactForm, ThunkCon
     };
     try {
       const data = await addContact(contact);
-      api.dispatch(updateUser(UpdateType.Increment));
       return data;
     } catch (err) {
       if (isAxiosError(err)) api.rejectWithValue(err.message);
