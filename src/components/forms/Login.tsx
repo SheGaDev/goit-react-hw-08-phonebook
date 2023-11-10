@@ -23,7 +23,11 @@ const LoginForm = () => {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(authLoginThunk(form)).then(() => {
+    dispatch(authLoginThunk(form)).then((data) => {
+      if (data.type.includes('rejected')) {
+        alert('Invalid email or password.');
+        return;
+      }
       fetchProfile().then(({ name, email, contacts }) => {
         dispatch(setUser({ name, email, contacts: contacts.length }));
         dispatch(updateContacts(contacts));
