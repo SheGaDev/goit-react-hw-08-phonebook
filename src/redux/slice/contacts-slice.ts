@@ -13,25 +13,20 @@ const contactsSlice = createSlice({
   reducers: {
     updateContacts: (state, { payload }) => {
       state.items = payload;
-      state.isLoading = false;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchContactsThunk.fulfilled, (state, { payload }) => {
         state.items = payload;
-        state.isLoading = false;
       })
       .addCase(addContactThunk.fulfilled, (state, { payload }) => {
         state.items.push(payload);
-        state.isLoading = false;
       })
       .addCase(deleteContactThunk.fulfilled, (state, { payload }) => {
         state.items = state.items.filter((contact) => contact.id !== payload.id);
-        state.isLoading = false;
       })
       .addCase(editContactThunk.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
         const index = state.items.findIndex((contact) => contact.id === payload.id);
         if (index < 0) return;
         state.items[index] = payload;
@@ -39,11 +34,9 @@ const contactsSlice = createSlice({
       });
     builder
       .addMatcher(isPending, (state) => {
-        state.isLoading = true;
         state.error = null;
       })
       .addMatcher(isRejected, (state, { payload }) => {
-        state.isLoading = false;
         state.error = payload as string;
       });
   },

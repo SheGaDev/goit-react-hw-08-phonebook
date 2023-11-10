@@ -12,5 +12,4 @@ export interface IContactForm {
 export type ContactsState = {
   items: IContact[];
   error: string | null;
-  isLoading: boolean;
 };
